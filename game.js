@@ -17,18 +17,23 @@ function setCanvasSize() {
   $canvas.setAttribute('width', canvasSize);
   $canvas.setAttribute('height', canvasSize);
 
-  elementsSize = (canvasSize / 10);
+  elementsSize = (canvasSize / 10) - 1;
 
   startGame();
 }
 
 function startGame() {
-  console.log(canvasSize, elementsSize);
-
   $game.font = elementsSize + 'px Verdana';
+  $game.textAlign = 'end'
 
-  for (let i = 0; i < 10; i++) {
-    $game.fillText(emojis['X'], elementsSize * i, elementsSize);
+  const map = maps[2];
+  const mapRows = map.trim().split("\n");
+  const mapRowsCols = mapRows.map(row => row.trim().split(""));
+  console.log(mapRows, mapRowsCols);
+
+  for (let x = 1; x <= 10; x++) {
+    for (let y = 1; y <= 10; y++) {
+     $game.fillText(emojis[mapRowsCols[y - 1][x - 1]], elementsSize * x + 15, elementsSize * y - 4);
+    }
   }
-
 }

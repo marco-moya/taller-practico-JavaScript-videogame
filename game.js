@@ -1,11 +1,13 @@
 const $canvas = document.querySelector('#game'),
-  game = $canvas.getContext('2d');
+  $game = $canvas.getContext('2d');
 
-window.addEventListener('load', startGame);
+let canvasSize,
+    elementsSize;
 
-function startGame() {
-  let canvasSize;
+window.addEventListener('load', setCanvasSize);
+window.addEventListener('resize', setCanvasSize);
 
+function setCanvasSize() {
   if (window.innerHeight > window.innerWidth) {
     canvasSize = window.innerWidth * 0.8;
   } else {
@@ -15,15 +17,18 @@ function startGame() {
   $canvas.setAttribute('width', canvasSize);
   $canvas.setAttribute('height', canvasSize);
 
-  const elementsSize = (canvasSize / 10);
+  elementsSize = (canvasSize / 10);
 
+  startGame();
+}
+
+function startGame() {
   console.log(canvasSize, elementsSize);
 
-  game.font = elementsSize + 'px Verdana';
+  $game.font = elementsSize + 'px Verdana';
 
   for (let i = 0; i < 10; i++) {
-    game.fillText(emojis['X'], elementsSize * i, elementsSize);
+    $game.fillText(emojis['X'], elementsSize * i, elementsSize);
   }
 
 }
-console.log(window.innerWidth, window.innerHeight);

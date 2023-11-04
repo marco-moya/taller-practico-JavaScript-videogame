@@ -22,18 +22,28 @@ function setCanvasSize() {
   startGame();
 }
 
-function startGame() {
+function startGame() { 
   $game.font = elementsSize + 'px Verdana';
-  $game.textAlign = 'end'
+  $game.textAlign = 'start'
 
-  const map = maps[2];
+  const map = maps[1];
   const mapRows = map.trim().split("\n");
   const mapRowsCols = mapRows.map(row => row.trim().split(""));
   console.log(mapRows, mapRowsCols);
 
-  for (let x = 1; x <= 10; x++) {
-    for (let y = 1; y <= 10; y++) {
-     $game.fillText(emojis[mapRowsCols[y - 1][x - 1]], elementsSize * x + 15, elementsSize * y - 4);
-    }
-  }
+  mapRowsCols.forEach((row, indexRow) => {
+    row.forEach((col, indexCol) => {
+      const emoji = emojis[col];
+      const posX = elementsSize * indexCol - 4;
+      const posY = elementsSize * (indexRow + 1) -4;
+      $game.fillText(emoji, posX, posY);
+      console.log({row, col});
+    });
+  });
+
+  // for (let x = 1; x <= 10; x++) {
+  //   for (let y = 1; y <= 10; y++) {
+  //    $game.fillText(emojis[mapRowsCols[y - 1][x - 1]], elementsSize * x + 15, elementsSize * y - 4);
+  //   }
+  // }
 }

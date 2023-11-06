@@ -4,10 +4,14 @@ const $canvas = d.querySelector('#game'),
   $btnUp = d.querySelector('#up'),
   $btnLeft = d.querySelector('#left'),
   $btnRight = d.querySelector('#right'),
-  $btnDown = d.querySelector('#down');
-
+  $btnDown = d.querySelector('#down'),
+  playerPosition = {
+    x: undefined,
+    y: undefined,
+  };
+  
 let canvasSize,
-    elementsSize;
+  elementsSize;
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
@@ -30,27 +34,34 @@ function setCanvasSize() {
 function startGame() { 
   $game.font = elementsSize + 'px Verdana';
   $game.textAlign = 'start'
-
-  const map = maps[1];
+  const map = maps[0];
+  // Usando trim para eliminar los espacios vacíos laterales del elemento map y el metodo split para convertir el string en un nuevo array a partir de los saltos de linea "\n".
   const mapRows = map.trim().split("\n");
+  // Usando el metodo array.map comvertimos cada elemento del mapRow en un array cuyo elementos son serados por el metodo split.
   const mapRowsCols = mapRows.map(row => row.trim().split(""));
-  //console.log(mapRows, mapRowsCols);
-
+  
+  $game.clearRect(0, 0, canvasSize, canvasSize);
   mapRowsCols.forEach((row, indexRow) => {
     row.forEach((col, indexCol) => {
       const emoji = emojis[col];
       const posX = elementsSize * indexCol - 4;
-      const posY = elementsSize * (indexRow + 1) -4;
+      const posY = elementsSize * (indexRow + 1) - 4;
+
+      if (col === 'O') {
+        if (playerPosition.x === undefined && playerPosition.y === undefined) {
+          playerPosition.x = posX;
+          playerPosition.y = posY;
+        }
+      }
+
       $game.fillText(emoji, posX, posY);
-      //console.log({row, col});
     });
   });
+  movePlayer();
+}
 
-  // for (let x = 1; x <= 10; x++) {
-  //   for (let y = 1; y <= 10; y++) {
-  //    $game.fillText(emojis[mapRowsCols[y - 1][x - 1]], elementsSize * x + 15, elementsSize * y - 4);
-  //   }
-  // }
+function movePlayer() {
+  $game.fillText(emojis.PLAYER, playerPosition.x, playerPosition.y);
 }
 
 d.addEventListener('click', (e) => {
@@ -65,17 +76,25 @@ d.addEventListener('keydown', e => {
   if (e.keyCode === 37) moveLeft();
   if (e.keyCode === 39) moveRight();
   if (e.keyCode === 40) moveDown();
-})
+});
 
 function moveUp() {
   console.log('mover hacia arriba');
+  playerPosition.y -= elementsSize;
+  startGame();
 }
 function moveLeft() {
   console.log('mover hacia izquierda');
+  playerPosition.x -= elementsSize;
+  startGame();
 }
 function moveRight() {
   console.log('mover hacia derecha');
+  playerPosition.x += elementsSize;
+  startGame();
 }
 function moveDown() {
   console.log('mover hacia abajo');
+  playerPosition.y += elementsSize;
+  startGame();
 }

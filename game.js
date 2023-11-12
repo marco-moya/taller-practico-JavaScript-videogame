@@ -16,7 +16,8 @@ const d = document,
   
   let canvasSize,
   elementsSize,
-  enemyPosition = [];
+  enemyPosition = [],
+  nivel = 0;
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
@@ -42,7 +43,12 @@ function setCanvasSize() {
 function startGame() { 
   $game.font = elementsSize + 'px Verdana';
   $game.textAlign = 'end'
-  const map = maps[0];
+  const map = maps[nivel];
+
+  if (!map) {
+    gameWin();
+    return;
+  }
   const mapRows = map.trim().split("\n"); // Usando trim para eliminar los espacios vacíos laterales del elemento map y el metodo split para convertir el string en un nuevo array a partir de los saltos de linea "\n".
   const mapRowsCols = mapRows.map(row => row.trim().split("")); // Usando el metodo array.map comvertimos cada elemento del mapRow en un array cuyo elementos son creados por el metodo split.
   
@@ -74,19 +80,34 @@ function startGame() {
 }
 
 function movePlayer() {
+  $game.fillText(emojis.PLAYER, playerPosition.x, playerPosition.y);
+
   const gifCollitionX = playerPosition.x == giftPosition.x;
   const gifCollitionY = playerPosition.y == giftPosition.y;
   const gifCollition = gifCollitionX && gifCollitionY
-  if (gifCollition) console.log('¡Sube de nivel!');
-  $game.fillText(emojis.PLAYER, playerPosition.x, playerPosition.y);
-  console.log(enemyPosition);
+  if (gifCollition) {
+    levelWin();
+  }
+  //console.log(enemyPosition);
   
   const enemyColition = enemyPosition.find(enemy => {
     const enemyColitionX = enemy.x == playerPosition.x;
     const enemyColitionY = enemy.y == playerPosition.y;
     return enemyColitionX && enemyColitionY;
   })
-  if (enemyColition) console.log('Chocaste');
+  if (enemyColition) {
+    console.log('Chocaste');
+  };
+}
+
+function levelWin() {
+  console.log('subiste de nivel');
+  nivel += 1;
+  startGame();
+}
+
+function gameWin() {
+  console.log('Terminaste el juego');
 }
 
 d.addEventListener('click', (e) => {

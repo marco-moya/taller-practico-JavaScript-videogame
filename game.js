@@ -5,6 +5,7 @@ const d = document,
   $btnLeft = d.querySelector('#left'),
   $btnRight = d.querySelector('#right'),
   $btnDown = d.querySelector('#down'),
+  $spanLives = d.querySelector('#lives'),
   playerPosition = {
     x: undefined,
     y: undefined,
@@ -78,6 +79,7 @@ function startGame() {
     });
   });
   movePlayer();
+  showLives();
 }
 
 function movePlayer() {
@@ -89,7 +91,6 @@ function movePlayer() {
   if (gifCollition) {
     levelWin();
   }
-  //console.log(enemyPosition);
   
   const enemyColition = enemyPosition.find(enemy => {
     const enemyColitionX = enemy.x == playerPosition.x;
@@ -108,20 +109,24 @@ function levelWin() {
   startGame();
 }
 
-function gameWin() {
-  console.log('Terminaste el juego');
-}
-
 function levelFail() {
   playerPosition.x = undefined;
   playerPosition.y = undefined;
   lives -= 1;
   console.log(lives);
-    if (lives === 0) {
-      level = 0;
-      lives = 3;
-    }
+  if (lives === 0) {
+    level = 0;
+    lives = 3;
+  }
   startGame();
+}
+
+function gameWin() {
+  console.log('Terminaste el juego');
+}
+
+function showLives() {
+  $spanLives.innerHTML = emojis.HEART.repeat(lives);
 }
 
 d.addEventListener('click', (e) => {

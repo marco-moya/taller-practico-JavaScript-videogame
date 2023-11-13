@@ -15,9 +15,10 @@ const d = document,
   };
   
   let canvasSize,
-  elementsSize,
-  enemyPosition = [],
-  nivel = 0;
+    elementsSize,
+    enemyPosition = [],
+    level = 0,
+    lives = 3;
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
@@ -43,7 +44,7 @@ function setCanvasSize() {
 function startGame() { 
   $game.font = elementsSize + 'px Verdana';
   $game.textAlign = 'end'
-  const map = maps[nivel];
+  const map = maps[level];
 
   if (!map) {
     gameWin();
@@ -97,17 +98,30 @@ function movePlayer() {
   })
   if (enemyColition) {
     console.log('Chocaste');
+    levelFail();
   };
 }
 
 function levelWin() {
   console.log('subiste de nivel');
-  nivel += 1;
+  level += 1;
   startGame();
 }
 
 function gameWin() {
   console.log('Terminaste el juego');
+}
+
+function levelFail() {
+  playerPosition.x = undefined;
+  playerPosition.y = undefined;
+  lives -= 1;
+  console.log(lives);
+    if (lives === 0) {
+      level = 0;
+      lives = 3;
+    }
+  startGame();
 }
 
 d.addEventListener('click', (e) => {

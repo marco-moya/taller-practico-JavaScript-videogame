@@ -6,6 +6,7 @@ const d = document,
   $btnRight = d.querySelector('#right'),
   $btnDown = d.querySelector('#down'),
   $spanLives = d.querySelector('#lives'),
+  $spanTime = d.querySelector('#time'),
   playerPosition = {
     x: undefined,
     y: undefined,
@@ -19,7 +20,10 @@ const d = document,
     elementsSize,
     enemyPosition = [],
     level = 0,
-    lives = 3;
+    lives = 3,
+    timeStart,
+    timeInterval,
+    timePlayer;
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
@@ -51,6 +55,12 @@ function startGame() {
     gameWin();
     return;
   }
+
+  if (!timeStart) {
+    timeStart = Date.now();
+    timeInterval = setInterval(showTime, 100);
+  }
+
   const mapRows = map.trim().split("\n"); // Usando trim para eliminar los espacios vacíos laterales del elemento map y el metodo split para convertir el string en un nuevo array a partir de los saltos de linea "\n".
   const mapRowsCols = mapRows.map(row => row.trim().split("")); // Usando el metodo array.map comvertimos cada elemento del mapRow en un array cuyo elementos son creados por el metodo split.
   
@@ -117,16 +127,22 @@ function levelFail() {
   if (lives === 0) {
     level = 0;
     lives = 3;
+    timeStart = undefined;
   }
   startGame();
 }
 
 function gameWin() {
   console.log('Terminaste el juego');
+  clearInterval(timeInterval);
 }
 
 function showLives() {
   $spanLives.innerHTML = emojis.HEART.repeat(lives);
+}
+
+function showTime() {
+  $spanTime.innerHTML = Date.now() - timeStart;
 }
 
 d.addEventListener('click', (e) => {

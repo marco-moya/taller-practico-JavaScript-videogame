@@ -7,6 +7,7 @@ const d = document,
   $btnDown = d.querySelector('#down'),
   $spanLives = d.querySelector('#lives'),
   $spanTime = d.querySelector('#time'),
+  $spanRecord = d.querySelector('#record'),
   playerPosition = {
     x: undefined,
     y: undefined,
@@ -16,14 +17,15 @@ const d = document,
     y: undefined,
   };
   
-  let canvasSize,
-    elementsSize,
-    enemyPosition = [],
-    level = 0,
-    lives = 3,
-    timeStart,
-    timeInterval,
-    timePlayer;
+let canvasSize,
+  elementsSize,
+  enemyPosition = [],
+  level = 0,
+  lives = 3,
+  timeStart,
+  timeInterval,
+  timePlayer,
+  playerTime;
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
@@ -59,6 +61,7 @@ function startGame() {
   if (!timeStart) {
     timeStart = Date.now();
     timeInterval = setInterval(showTime, 100);
+    showRecord();
   }
 
   const mapRows = map.trim().split("\n"); // Usando trim para eliminar los espacios vacíos laterales del elemento map y el metodo split para convertir el string en un nuevo array a partir de los saltos de linea "\n".
@@ -135,6 +138,21 @@ function levelFail() {
 function gameWin() {
   console.log('Terminaste el juego');
   clearInterval(timeInterval);
+  const recordTime = localStorage.getItem('record_time');
+  
+  if (recordTime) {
+    if (recordTime > playerTime) {
+      localStorage.setItem('record_time', playerTime);
+      console.log('Superaste el record');
+    } else {
+      console.log('No superaste el record');
+    }
+  } else {
+    localStorage.setItem('record_time', playerTime);
+    console.log('Es el primer juego');
+  }
+
+  console.log(recordTime, playerTime);
 }
 
 function showLives() {
@@ -142,7 +160,12 @@ function showLives() {
 }
 
 function showTime() {
-  $spanTime.innerHTML = Date.now() - timeStart;
+  playerTime = Date.now() - timeStart
+  $spanTime.innerHTML = playerTime;
+}
+
+function showRecord() {
+  $spanRecord.innerHTML = localStorage.getItem('record_time');
 }
 
 d.addEventListener('click', (e) => {

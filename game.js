@@ -8,6 +8,11 @@ const d = document,
   $spanLives = d.querySelector('#lives'),
   $spanTime = d.querySelector('#time'),
   $spanRecord = d.querySelector('#record'),
+  $spanMessage = d.querySelector('#message'),
+  $spanMessageRecord = d.querySelector('#message-record'),
+  $sectionGame = d.querySelector('.section-game'),
+  $sectionStartGame = d.querySelector('.section-start-game'),
+  $sectionEndGame = d.querySelector('.section-end-game'),
   playerPosition = {
     x: undefined,
     y: undefined,
@@ -27,7 +32,7 @@ let canvasSize,
   timePlayer,
   playerTime;
 
-window.addEventListener('load', setCanvasSize);
+//window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
 
 function setCanvasSize() {
@@ -43,8 +48,10 @@ function setCanvasSize() {
   $canvas.setAttribute('height', canvasSize);
 
   elementsSize = (canvasSize / 10);
-  elementsSize = Math.round(parseFloat(elementsSize.toFixed(2)));
+  elementsSize = Math.round(Number(elementsSize.toFixed(2)));
 
+  playerPosition.x = undefined;
+  playerPosition.y = undefined;
   startGame();
 }
 
@@ -144,14 +151,19 @@ function gameWin() {
     if (recordTime > playerTime) {
       localStorage.setItem('record_time', playerTime);
       console.log('Superaste el record');
+      $spanMessage.innerHTML = 'Superaste el record';
+      mensaje();
     } else {
-      console.log('No superaste el record');
+      $spanMessage.innerHTML = 'No superaste el record';
+      mensaje();
     }
   } else {
     localStorage.setItem('record_time', playerTime);
     console.log('Es el primer juego');
+    mensaje();
   }
 
+  $sectionEndGame.classList.add('transform');
   console.log(recordTime, playerTime);
 }
 
@@ -168,7 +180,19 @@ function showRecord() {
   $spanRecord.innerHTML = localStorage.getItem('record_time');
 }
 
+function mensaje() {
+  $spanMessageRecord.innerHTML = playerTime;
+}
+
 d.addEventListener('click', (e) => {
+  if (e.target.matches('#new-game')) {
+    $sectionGame.classList.remove('is-active');
+    $sectionStartGame.classList.add('is-active');
+    setCanvasSize();
+  }
+  if (e.target.matches('#btn-end-game')) {
+    location.reload();
+  }
   if (e.target.matches('#up')) moveUp();
   if (e.target.matches('#left')) moveLeft();
   if (e.target.matches('#right')) moveRight();

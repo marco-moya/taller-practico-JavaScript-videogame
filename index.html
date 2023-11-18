@@ -7,22 +7,40 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="game-container">
-    <canvas id="game"></canvas>
-
-    <div class="btns">
-      <button id="up">Arriba</button>
-      <button id="left">Izquierda</button>
-      <button id="right">Derecha</button>
-      <button id="down">Abajo</button>
+  <section class="section-start-game">
+    <h1>Run Super Fast</h1>
+    <div class="container-buttons-start-game">
+      <button id="new-game">New Game</button>
+      <button>Score</button>
     </div>
+  </section>
 
-    <div class="messages">
-      <p>Vidas: <span id="lives"></span></p>
-      <p>Tiempo⏱️<span id="time"></span></p>
-      <p>Record: <span id="record"></span></p>
+  <section class="section-game is-active">
+    <div class="game-container">
+      <canvas id="game"></canvas>
+      <div class="btns">
+        <button id="up">Arriba</button>
+        <button id="left">Izquierda</button>
+        <button id="right">Derecha</button>
+        <button id="down">Abajo</button>
+      </div>
+      <div class="messages">
+        <p>Vidas: <span id="lives"></span></p>
+        <p>Tiempo⏱️<span id="time"></span></p>
+        <p>Record🏁 <span id="record"></span></p>
+      </div>
     </div>
-  </div>
+  </section>
+
+  <section class="section-end-game">
+    <div class="card-end-game">
+      <p>🏆</p>
+      <p>Ganaste</p>
+      <p>Tu tiempo es: <span id="message-record"></span></p>
+      <p><span id="message"></span></p>
+      <button id="btn-end-game">Volver a jugar</button>
+    </div>
+  </section>
 
   <script src="./maps.js"></script>
   <script src="./game.js"></script>
